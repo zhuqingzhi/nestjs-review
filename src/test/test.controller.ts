@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { TestService } from './test.service';
 import { CreateTestDto } from './dto/create-test.dto';
@@ -21,7 +22,8 @@ export class TestController {
   }
 
   @Get()
-  findAll() {
+  findAll(@Query() query: any) {
+    return query;
     return this.testService.findAll();
   }
 

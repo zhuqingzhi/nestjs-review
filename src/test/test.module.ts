@@ -5,5 +5,6 @@ import { TestController } from './test.controller';
 @Module({
   controllers: [TestController],
   providers: [TestService],
+  exports,
 })
 export class TestModule {}
