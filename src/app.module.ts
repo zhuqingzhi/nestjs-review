@@ -8,6 +8,9 @@ import { RoomsModule } from './rooms/rooms.module';
 import { BookingModule } from './booking/booking.module';
 import { StatisticModule } from './statistic/statistic.module';
 import { RolesModule } from './roles/roles.module';
+import { PermissonsModule } from './permissons/permissons.module';
+import { RedisModule } from './redis/redis.module';
+import { EmailModule } from './email/email.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -35,6 +38,9 @@ import { RolesModule } from './roles/roles.module';
     BookingModule,
     StatisticModule,
     RolesModule,
+    PermissonsModule,
+    RedisModule,
+    EmailModule,
   ],
   controllers: [AppController],
   providers: [AppService],
