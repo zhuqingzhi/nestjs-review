@@ -12,13 +12,14 @@ import { PermissonsModule } from './permissons/permissons.module';
 import { RedisModule } from './redis/redis.module';
 import { EmailModule } from './email/email.module';
 import { AuthModule } from './auth/auth.module';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { LoginGuard } from './guards/login.guard';
 import { PermissionGuard } from './guards/permission.guard';
 import * as path from 'path';
 import { User } from './user/entities/user.entity';
 import { Permission } from './permissons/entities/permission.entity';
 import { Role } from './roles/entities/role.entity';
+import { ResponseInterceptor } from './interceptors/response.interceptor';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -62,6 +63,10 @@ import { Role } from './roles/entities/role.entity';
     {
       provide: APP_GUARD,
       useClass: PermissionGuard,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ResponseInterceptor,
     },
   ],
 })
