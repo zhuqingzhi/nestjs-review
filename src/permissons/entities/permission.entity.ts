@@ -3,15 +3,17 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 @Entity()
 export class Permission {
   @PrimaryGeneratedColumn()
-  id: string;
+  id: number;
 
   @Column({
-    comment: '权限码',
+    length: 20,
+    comment: '权限代码',
   })
   code: string;
 
   @Column({
-    comment: '描述',
+    length: 100,
+    comment: '权限描述',
   })
   desc: string;
 }
