@@ -11,6 +11,8 @@ import { UserService } from './user.service';
 import { RegisterDto } from './dtos/register.dto';
 import { EmailPipe } from './emailPipe';
 import { LoginDto } from './dtos/login.dto';
+import { RequireLogin } from 'src/customDecorators/login.decorator';
+import { UserDetailVo } from './vos/userDetail.vo';
 
 @Controller('user')
 export class UserController {
@@ -31,9 +33,19 @@ export class UserController {
   async getCaptcha(@Query('email', EmailPipe) email: string) {
     return await this.userService.getCaptcha(email);
   }
+  @RequireLogin()
   @Get('detail/:id')
   async getUserDetail(@Param('id') id: string) {
-    return await this.userService.getUserDetail(id);
+    const userInfo = await this.userService.getUserDetail(id);
+    const userVo = new UserDetailVo();
+    userVo.id = userInfo.id;
+    userVo.avatar = userInfo.avatar;
+    userVo.email = userInfo.email;
+    userVo.isAdmin = userInfo.isAdmin;
+    userVo.isFrosen = userInfo.isFrosen;
+    userVo.nickname = userInfo.nickname;
+    userVo.phoneNumber = userInfo.phoneNumber;
+    return userVo;
   }
   @Get('refresh')
   async refreshToken(@Query('token') token: string) {

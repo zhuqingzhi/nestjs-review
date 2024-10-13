@@ -42,12 +42,21 @@ export class LoginGuard implements CanActivate {
     if (!authorization) throw new UnauthorizedException();
     const userInfo = this.authService.verify(authorization);
     if (!userInfo) throw new UnauthorizedException();
-    request.user = {
-      id: userInfo.id,
-      username: userInfo.username,
-      roles: userInfo.roles,
-      permissions: userInfo.permissions,
-    };
-    return true;
+    if (
+      userInfo.id &&
+      userInfo.username &&
+      userInfo.roles &&
+      userInfo.permissions
+    ) {
+      request.user = {
+        id: userInfo.id,
+        username: userInfo.username,
+        roles: userInfo.roles,
+        permissions: userInfo.permissions,
+      };
+      return true;
+    } else {
+      throw new UnauthorizedException();
+    }
   }
 }
