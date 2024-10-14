@@ -66,4 +66,9 @@ export class UserController {
   async getUserList() {
     return this.userService.getUserList();
   }
+  @RequireLogin()
+  @Get('frosen')
+  async frosenUser(@Query('id') id: string) {
+    return await this.userService.frosenUser(id);
+  }
 }

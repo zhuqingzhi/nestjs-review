@@ -104,7 +104,7 @@ export class UserService {
       roles: user.roles,
       permissions: Array.from(permissions),
     };
-    const access_token = this.authService.sign(payload, 60);
+    const access_token = this.authService.sign(payload, 300);
     const refresh_token = this.authService.sign(
       {
         id: user.id,
@@ -219,5 +219,13 @@ export class UserService {
       };
     });
     return userList;
+  }
+  async frosenUser(id: string) {
+    const user = await this.getUserDetailById(id);
+    await this.userRepository.save({
+      ...user,
+      isFrosen: true,
+    });
+    return 'success';
   }
 }
