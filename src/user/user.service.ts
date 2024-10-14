@@ -202,4 +202,22 @@ export class UserService {
     this.authService.expire(key);
     return 'success';
   }
+  async getUserList() {
+    let userList: any = await this.userRepository.find();
+    userList = userList.map((item) => {
+      return {
+        id: item.id,
+        username: item.username,
+        email: item.email,
+        nickname: item.nickname,
+        avatar: item.avatar,
+        phoneNumber: item.phoneNumber,
+        isAdmin: item.isAdmin,
+        isFrosen: item.isFrosen,
+        createTime: item.createTime,
+        updateTime: item.updateTime,
+      };
+    });
+    return userList;
+  }
 }

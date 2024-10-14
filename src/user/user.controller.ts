@@ -61,4 +61,9 @@ export class UserController {
   ) {
     return await this.userService.updateUser(userId, updateUser);
   }
+  @RequireLogin()
+  @Get('list')
+  async getUserList() {
+    return this.userService.getUserList();
+  }
 }
