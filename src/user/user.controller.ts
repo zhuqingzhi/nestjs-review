@@ -13,6 +13,8 @@ import { EmailPipe } from './emailPipe';
 import { LoginDto } from './dtos/login.dto';
 import { RequireLogin } from 'src/customDecorators/login.decorator';
 import { UserDetailVo } from './vos/userDetail.vo';
+import { userInfoDecorator } from 'src/customDecorators/userinfo.decorator';
+import { UpdateUserDto } from './dtos/updateUser.dto';
 
 @Controller('user')
 export class UserController {
@@ -50,5 +52,13 @@ export class UserController {
   @Get('refresh')
   async refreshToken(@Query('token') token: string) {
     return await this.userService.refreshToken(token);
+  }
+  @RequireLogin()
+  @Post(['update', 'admin/update'])
+  async updateUserInfo(
+    @userInfoDecorator('id') userId: string,
+    @Body() updateUser: UpdateUserDto,
+  ) {
+    return await this.userService.updateUser(userId, updateUser);
   }
 }

@@ -14,4 +14,7 @@ export class RedisService {
   async get(key: string): Promise<string> {
     return this.redisClient.get(key);
   }
+  async expire(key: string) {
+    await this.redisClient.expire(key, -1);
+  }
 }

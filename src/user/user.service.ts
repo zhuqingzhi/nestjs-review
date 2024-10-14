@@ -18,6 +18,7 @@ import { LoginDto } from './dtos/login.dto';
 import { AuthService } from 'src/auth/auth.service';
 import { Permission } from 'src/permissons/entities/permission.entity';
 import { Role } from 'src/roles/entities/role.entity';
+import { UpdateUserDto } from './dtos/updateUser.dto';
 
 @Injectable()
 export class UserService {
@@ -56,8 +57,8 @@ export class UserService {
       captcha = random;
       // 发送验证码
       await this.emailService.sendEmail(email, captcha);
-      this.redisService.set(key, random, 5 * 60 * 1000);
-      return captcha;
+      this.redisService.set(key, random, 60);
+      return null;
     }
 
     return '验证码已存在';
@@ -103,7 +104,7 @@ export class UserService {
       roles: user.roles,
       permissions: Array.from(permissions),
     };
-    const access_token = this.authService.sign(payload, 10);
+    const access_token = this.authService.sign(payload, 60);
     const refresh_token = this.authService.sign(
       {
         id: user.id,
@@ -183,5 +184,22 @@ export class UserService {
       access_token,
       refresh_token,
     };
+  }
+
+  async updateUser(userId: string, userDto: UpdateUserDto) {
+    const key = 'captcha_' + userDto.email;
+    const captcha = await this.redisService.get(key);
+    if (!captcha)
+      throw new HttpException('验证码已过期', HttpStatus.BAD_REQUEST);
+    if (captcha !== userDto.captcha)
+      throw new BadRequestException('验证码错误');
+    await this.userRepository.save({
+      id: userId,
+      password: md5(userDto.password),
+      email: userDto.email,
+    });
+    // expire token
+    this.authService.expire(key);
+    return 'success';
   }
 }
