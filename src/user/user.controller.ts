@@ -16,7 +16,8 @@ import { UserDetailVo } from './vos/userDetail.vo';
 import { userInfoDecorator } from 'src/customDecorators/userinfo.decorator';
 import { UpdateUserDto } from './dtos/updateUser.dto';
 import { UserListDto } from './dtos/userList.dto';
-
+import { ApiBody, ApiTags } from '@nestjs/swagger';
+@ApiTags('用户')
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -24,6 +25,10 @@ export class UserController {
   async initUser() {
     return await this.userService.initUser();
   }
+
+  @ApiBody({
+    type: RegisterDto,
+  })
   @Post('register')
   async register(@Body() registerDto: RegisterDto) {
     return await this.userService.registerUser(registerDto);

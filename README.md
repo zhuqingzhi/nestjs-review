@@ -76,4 +76,19 @@ throw new UnloginError()
 由于有校验错误，class-validator
 因此response里面会返回校验错误，需要一起处理
 
-###
+#### 模糊查询用户列表
+
+```js
+if(UpdateUserDto.email){
+    conditions.email=Like(`%${}%`)
+}
+where:conditions
+take,
+skip
+```
+
+#### swagger文档
+
+controller:@ApiTag
+dto:@ApiProperty
+handler:@ApiQUery,@ApiResponse,@ApiBody,
