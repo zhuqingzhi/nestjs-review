@@ -9,7 +9,7 @@ import {
 import { RegisterDto } from './dtos/register.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, Like, Repository } from 'typeorm';
 import { md5 } from 'src/utils';
 import { RedisService } from 'src/redis/redis.service';
 import { EmailService } from 'src/email/email.service';
@@ -19,6 +19,7 @@ import { AuthService } from 'src/auth/auth.service';
 import { Permission } from 'src/permissons/entities/permission.entity';
 import { Role } from 'src/roles/entities/role.entity';
 import { UpdateUserDto } from './dtos/updateUser.dto';
+import { UserListDto } from './dtos/userList.dto';
 
 @Injectable()
 export class UserService {
@@ -104,7 +105,7 @@ export class UserService {
       roles: user.roles,
       permissions: Array.from(permissions),
     };
-    const access_token = this.authService.sign(payload, 300);
+    const access_token = this.authService.sign(payload, 500);
     const refresh_token = this.authService.sign(
       {
         id: user.id,
@@ -173,7 +174,7 @@ export class UserService {
       roles: findUser.roles,
       permissions: Array.from(permissions),
     };
-    const access_token = this.authService.sign(payload, 20);
+    const access_token = this.authService.sign(payload, 200);
     const refresh_token = this.authService.sign(
       {
         id: findUser.id,
@@ -202,8 +203,22 @@ export class UserService {
     this.authService.expire(key);
     return 'success';
   }
-  async getUserList() {
-    let userList: any = await this.userRepository.find();
+  async getUserList(userListDto: UserListDto) {
+    const condition: Record<string, any> = {};
+    if (userListDto.nickname) {
+      condition.nickname = Like(`%${userListDto.nickname}%`);
+    }
+    if (userListDto.username) {
+      condition.username = Like(`%${userListDto.username}%`);
+    }
+    if (userListDto.email) {
+      condition.email = Like(`%${userListDto.email}%`);
+    }
+    let userList: any = await this.userRepository.find({
+      take: userListDto.pageSize,
+      skip: (userListDto.pageNo - 1) * userListDto.pageSize,
+      where: condition,
+    });
     userList = userList.map((item) => {
       return {
         id: item.id,

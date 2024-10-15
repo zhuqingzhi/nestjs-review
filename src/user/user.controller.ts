@@ -15,6 +15,7 @@ import { RequireLogin } from 'src/customDecorators/login.decorator';
 import { UserDetailVo } from './vos/userDetail.vo';
 import { userInfoDecorator } from 'src/customDecorators/userinfo.decorator';
 import { UpdateUserDto } from './dtos/updateUser.dto';
+import { UserListDto } from './dtos/userList.dto';
 
 @Controller('user')
 export class UserController {
@@ -62,9 +63,9 @@ export class UserController {
     return await this.userService.updateUser(userId, updateUser);
   }
   @RequireLogin()
-  @Get('list')
-  async getUserList() {
-    return this.userService.getUserList();
+  @Post('list')
+  async getUserList(@Body() queryParams: UserListDto) {
+    return this.userService.getUserList(queryParams);
   }
   @RequireLogin()
   @Get('frosen')
