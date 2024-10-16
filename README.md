@@ -76,9 +76,6 @@ throw new UnloginError()
 由于有校验错误，class-validator
 因此response里面会返回校验错误，需要一起处理
 
-<<<<<<< Updated upstream
-###
-=======
 #### 模糊查询用户列表
 
 ```js
@@ -107,6 +104,7 @@ handler:@ApiQUery,@ApiResponse,@ApiBody,
 - 会议室修改
 
 - 会议室新增
+  新增接口的数据唯一性校验，通常是name校验
 
 - 会议室搜索
 
@@ -114,5 +112,18 @@ handler:@ApiQUery,@ApiResponse,@ApiBody,
 
 - 查看会议室列表
 
--
->>>>>>> Stashed changes
+- 搜索可用会议室
+
+##### 分析接口
+
+/meeting_room/list get
+/meeting_room/:id get 回显数据接口
+/meeting_room/delete delete
+/modify/:id put
+/add post
+/search get
+
+list和search接口的实现应该差不多，只是传入了模糊查询参数
+
+有外键约束的需要删除外部约束才能删除这条数据
+通常是去中间表中删除这个id关联的记录

@@ -21,6 +21,7 @@ import { Permission } from './permissons/entities/permission.entity';
 import { Role } from './roles/entities/role.entity';
 import { ResponseInterceptor } from './interceptors/response.interceptor';
 import { GlobalExceptionFilter } from './filters/global_exception.filter';
+import { RoomEntity } from './rooms/entities/room.entity';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -37,7 +38,7 @@ import { GlobalExceptionFilter } from './filters/global_exception.filter';
           connectorPackage: 'mysql2',
           database: 'meeting',
           synchronize: true,
-          entities: [User, Permission, Role],
+          entities: [User, Permission, Role, RoomEntity],
           type: 'mysql',
           logging: true,
         };
