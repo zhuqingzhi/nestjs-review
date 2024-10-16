@@ -76,4 +76,43 @@ throw new UnloginError()
 由于有校验错误，class-validator
 因此response里面会返回校验错误，需要一起处理
 
+<<<<<<< Updated upstream
 ###
+=======
+#### 模糊查询用户列表
+
+```js
+if(UpdateUserDto.email){
+    conditions.email=Like(`%${}%`)
+}
+where:conditions
+take,
+skip
+```
+
+#### swagger文档
+
+controller:@ApiTag
+dto:@ApiProperty
+handler:@ApiQUery,@ApiResponse,@ApiBody,
+
+#### 会议室模块分析
+
+##### 管理员
+
+- 会议室列表
+
+- 会议室删除
+
+- 会议室修改
+
+- 会议室新增
+
+- 会议室搜索
+
+##### 普通用户
+
+- 查看会议室列表
+
+-
+>>>>>>> Stashed changes
